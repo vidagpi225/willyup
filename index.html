@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="vi" data-theme="system">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" id="themeColorMeta" content="#faf6ee" />
+<link rel="icon" href="data:," />
+<title>Nhật Ký · Lịch Tuần · Nhạc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Patrick+Hand&family=Dancing+Script:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --bg:#faf6ee;
+    --bg2:#f3ecdc;
+    --surface:#fffdf8;
+    --surface2:#f3ecdc;
+    --ink:#23201a;
+    --ink2:#575144;
+    --muted:#7a7263;
+    --line:#e7ddcb;
+    --accent:#c2410c;
+    --accent-ink:#ffffff;
+    --accent-soft:#fbe9dd;
+    --green:#4d6b57;
+    --green-soft:#e3ecdf;
+    --warm:#4d6b57;
+    --warm-soft:#e3ecdf;
+    --gold:#c2410c;
+    --danger:#c2410c;
+    --danger-soft:#fbe9dd;
+    --paper:#fffdf8;
+    --paper-line:#e7ddcb;
+    --shadow:0 10px 30px rgba(35,32,26,.09);
+    --radius:14px;
+  }
+  /* Dark palette — applied when the user picks “Tối” … */
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#171410;
+    --bg2:#171410;
+    --surface:#221d16;
+    --surface2:#2b251b;
+    --ink:#f0e9da;
+    --ink2:#bfb298;
+    --muted:#a89c85;
+    --line:#3a332a;
+    --accent:#f0834c;
+    --accent-ink:#ffffff;
+    --accent-soft:#3d2a1d;
+    --green:#9db89a;
+    --green-soft:#2c382a;
+    --warm:#9db89a;
+    --warm-soft:#2c382a;
+    --gold:#f0834c;
+    --danger:#f0834c;
+    --danger-soft:#3d2a1d;
+    --paper:#221d16;
+    --paper-line:#3a332a;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  /* … or automatically when “Theo hệ thống” meets a dark system setting */
+  @media (prefers-color-scheme: dark){
+    :root[data-theme="system"]{
+      color-scheme:dark;
+      --bg:#171410;
+      --bg2:#171410;
+      --surface:#221d16;
+      --surface2:#2b251b;
+      --ink:#f0e9da;
+      --ink2:#bfb298;
+      --muted:#a89c85;
+      --line:#3a332a;
+      --accent:#f0834c;
+      --accent-ink:#ffffff;
+      --accent-soft:#3d2a1d;
+      --green:#9db89a;
+      --green-soft:#2c382a;
+      --warm:#9db89a;
+      --warm-soft:#2c382a;
+      --gold:#f0834c;
+      --danger:#f0834c;
+      --danger-soft:#3d2a1d;
+      --paper:#221d16;
+      --paper-line:#3a332a;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:"Be Vietnam Pro",system-ui,sans-serif;
+    background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--accent)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 90px}
+
+  /* Header / hero */
+  .hero{padding:26px 2px 8px}
+  .hero h1{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(30px,5vw,46px);
+    line-height:1.05;margin:0 0 10px;letter-spacing:-.01em;font-weight:800;
+  }
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero p{margin:0;color:var(--ink2);max-width:640px;font-size:15.5px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .pill{
+    display:inline-flex;align-items:center;gap:7px;
+    background:var(--surface);border:1px solid var(--line);
+    padding:7px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink2);
+  }
+  .pill strong{color:var(--ink)}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}
+
+  /* Theme switcher — Sáng / Tối / Theo hệ thống */
+  .theme-bar{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 14px;
+    padding-top:4px;
+  }
+  .theme-label{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .theme-switch{
+    display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--line);
+    border-radius:999px;padding:4px;box-shadow:var(--shadow);
+  }
+  .theme-btn{
+    border:0;background:transparent;color:var(--ink2);
+    min-height:38px;padding:8px 13px;border-radius:999px;
+    font-weight:700;font-size:13px;line-height:1;
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;
+  }
+  .theme-btn svg{width:16px;height:16px;flex:none}
+  .theme-btn:hover{color:var(--ink)}
+  .theme-btn.active{background:var(--accent);color:var(--accent-ink)}
+  .theme-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* Tabs */
+  .tabs{
+    position:sticky;top:10px;z-index:40;
+    display:flex;gap:6px;flex-wrap:wrap;
+    background:var(--surface);border:1px solid var(--line);border-radius:999px;
+    padding:6px;box-shadow:var(--shadow);margin:20px 0 22px;
+  }
+  .tab-btn{
+    flex:1 1 auto;border:0;background:transparent;color:var(--ink2);
+    padding:10px 14px;border-radius:999px;font-weight:700;font-size:14px;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;
+  }
+  .tab-btn svg{width:17px;height:17px;flex:none}
+  @media (max-width:640px){ .tabs{border-radius:18px} .tab-btn{flex:1 1 42%;border-radius:12px} }
+  .tab-btn.active{background:var(--accent);color:var(--accent-ink)}
+  .tab-btn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .panel{display:none}
+  .panel.active{display:block;animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){ .panel.active{animation:none} *{scroll-behavior:auto} }
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin:6px 0 14px}
+  .section-head h2{font-size:22px;margin:0;font-weight:800;letter-spacing:-.01em}
+  .section-head p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+
+  /* Buttons & inputs */
+  .btn{
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);
+    padding:9px 15px;border-radius:10px;font-weight:700;font-size:13.5px;
+    display:inline-flex;align-items:center;gap:7px;
+  }
+  .btn:hover{border-color:var(--muted)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .btn.primary:hover{filter:brightness(1.07)}
+  .btn.warm{background:var(--warm);border-color:var(--warm);color:#fff}
+  .btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
+  .btn.small{padding:6px 10px;font-size:12.5px;border-radius:8px}
+  .btn.danger{color:var(--danger)}
+  .input, select.input, textarea.input{
+    width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;font-size:14px;
+  }
+  .input::placeholder{color:var(--muted)}
+  label.lbl{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+
+  /* ---------- JOURNAL ---------- */
+  .journal-grid{display:grid;grid-template-columns:290px 1fr;gap:18px;align-items:start}
+  @media (max-width:860px){ .journal-grid{grid-template-columns:1fr} }
+  .entries{padding:16px}
+  .entries h3{margin:0 0 4px;font-size:15px}
+  .entries .hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+  .entry-item{
+    width:100%;text-align:left;border:1px solid var(--line);background:var(--surface2);
+    border-radius:10px;padding:11px 12px;margin-bottom:8px;display:block;
+  }
+  .entry-item:hover{border-color:var(--muted)}
+  .entry-item.active{border-color:var(--accent);background:var(--accent-soft)}
+  .entry-item .d{font-weight:700;font-size:13.5px;display:flex;justify-content:space-between;gap:8px}
+  .entry-item .d span:last-child{color:var(--muted);font-weight:500;font-size:12px}
+  .entry-item .t{font-weight:600;font-size:13px;margin-top:2px}
+  .entry-item .s{color:var(--muted);font-size:12.5px;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .empty-note{border:1.5px dashed var(--line);border-radius:10px;padding:18px 14px;text-align:center;color:var(--muted);font-size:13.5px}
+
+  .editor-card{overflow:hidden}
+  .editor-top{padding:16px 18px 0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+  .editor-top .grow{flex:1 1 220px}
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+    padding:12px 18px;border-bottom:1px solid var(--line);margin-top:14px;background:var(--surface2);
+  }
+  .toolbar .sep{width:1px;height:24px;background:var(--line);margin:0 4px;flex:none}
+  .tool-btn{
+    min-width:36px;height:36px;padding:0 9px;border:1px solid var(--line);background:var(--surface);
+    border-radius:8px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  }
+  .tool-btn:hover{border-color:var(--muted)}
+  .tool-btn.on{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+  .toolbar select{height:36px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:0 8px;font-size:13px;font-weight:600;max-width:170px}
+  .toolbar input[type="color"]{width:36px;height:36px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:3px;cursor:pointer}
+  .paper-wrap{padding:18px}
+  .paper{
+    background:var(--paper);border:1px solid var(--line);border-radius:8px;
+    min-height:380px;padding:14px 20px 30px 54px;position:relative;
+    box-shadow:inset 0 1px 0 rgba(0,0,0,.02);
+  }
+  .paper::before{
+    content:"";position:absolute;top:0;bottom:0;left:38px;width:1px;background:rgba(194,65,12,.45);
+  }
+  .paper-editor{
+    outline:none;min-height:340px;font-size:17px;line-height:32px;color:var(--ink);
+    background-image:repeating-linear-gradient(transparent,transparent 31px,var(--paper-line) 31px,var(--paper-line) 32px);
+    background-attachment:local;padding-top:2px;word-wrap:break-word;
+  }
+  .paper-editor:empty::before{content:attr(data-placeholder);color:var(--muted);pointer-events:none}
+  .paper-editor p{margin:0 0 0}
+  .editor-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:0 18px 18px}
+  .save-state{font-size:13px;color:var(--muted)}
+  .save-state.saved{color:var(--green);font-weight:600}
+
+  /* ---------- CALENDAR ---------- */
+  .weekbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .weekbar .range{font-weight:800;font-size:17px}
+  .weekbar .range span{display:block;font-weight:500;font-size:13px;color:var(--muted)}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+  @media (max-width:1020px){ .week-grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .week-grid{grid-template-columns:1fr} }
+  .day-col{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;min-height:170px;display:flex;flex-direction:column}
+  .day-col.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+  .day-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:10px}
+  .day-head .dow{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .day-head .dnum{font-family:"Playfair Display",serif;font-size:22px;font-weight:800;line-height:1}
+  .day-col.today .dnum{color:var(--accent)}
+  .day-head .today-tag{font-size:10.5px;font-weight:700;background:var(--accent);color:var(--accent-ink);padding:2px 7px;border-radius:999px}
+  .task{
+    border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:9px 10px;margin-bottom:8px;
+  }
+  .task.done{opacity:.72}
+  .task.done .task-title{text-decoration:line-through}
+  .task-top{display:flex;gap:8px;align-items:flex-start}
+  .check-btn{
+    flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);background:var(--surface);
+    display:inline-flex;align-items:center;justify-content:center;padding:0;margin-top:1px;color:#fff;
+  }
+  .check-btn svg{width:13px;height:13px;opacity:0}
+  .task.done .check-btn{background:var(--green);border-color:var(--green)}
+  .task.done .check-btn svg{opacity:1}
+  .task-title{font-weight:600;font-size:13.5px;flex:1;line-height:1.4}
+  .task-meta{font-size:12px;color:var(--muted);margin-top:3px}
+  .task-note{font-size:12.5px;color:var(--ink2);margin-top:4px;white-space:pre-wrap}
+  .task-actions{display:flex;gap:4px;margin-top:7px}
+  .task-actions button{border:0;background:transparent;color:var(--muted);font-size:12px;font-weight:700;padding:3px 6px;border-radius:6px}
+  .task-actions button:hover{background:var(--surface);color:var(--ink)}
+  .task-actions button.del:hover{color:var(--danger)}
+  .add-task-btn{
+    margin-top:auto;width:100%;border:1.5px dashed var(--line);background:transparent;color:var(--muted);
+    border-radius:10px;padding:8px;font-size:13px;font-weight:700;
+  }
+  .add-task-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .day-empty{font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0 12px}
+
+  /* ---------- STATS ---------- */
+  .stats-grid{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+  @media (max-width:860px){ .stats-grid{grid-template-columns:1fr} }
+  .ring-card{padding:24px;text-align:center}
+  .ring-wrap{position:relative;width:190px;height:190px;margin:6px auto 10px}
+  .ring-wrap svg{transform:rotate(-90deg)}
+  .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-center .pct{font-family:"Playfair Display",serif;font-size:44px;font-weight:800;line-height:1}
+  .ring-center .lbl{font-size:12.5px;color:var(--muted);font-weight:600}
+  .stat-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media (max-width:520px){ .stat-cards{grid-template-columns:1fr} }
+  .stat-card{padding:18px}
+  .stat-card .num{font-size:30px;font-weight:800;line-height:1.1;letter-spacing:-.01em}
+  .stat-card .num small{font-size:15px;color:var(--muted);font-weight:600}
+  .stat-card .cap{font-size:13px;color:var(--ink2);font-weight:600;margin-top:2px}
+  .stat-card.warn .num{color:var(--danger)}
+  .chart-card{padding:20px;margin-top:18px}
+  .chart-card h3,.list-card h3{margin:0 0 4px;font-size:16px}
+  .chart-card p.sub,.list-card p.sub{margin:0 0 16px;color:var(--muted);font-size:13px}
+  .bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end;min-width:0}
+  .bar{width:100%;max-width:44px;border-radius:7px 7px 3px 3px;background:var(--green);min-height:3px;position:relative;transition:height .3s ease}
+  .bar.cur{background:var(--accent)}
+  .bar-val{font-size:11.5px;font-weight:700;color:var(--ink2)}
+  .bar-lbl{font-size:11px;color:var(--muted);text-align:center;line-height:1.3}
+  .list-card{padding:20px;margin-top:18px}
+  .todo-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+  .todo-row:last-child{border-bottom:0}
+  .todo-row .when{flex:none;font-size:12px;font-weight:700;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:4px 8px;color:var(--ink2);min-width:86px;text-align:center}
+  .todo-row.overdue .when{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+  .todo-row .tt{font-weight:600;font-size:14px}
+  .todo-row .tm{font-size:12.5px;color:var(--muted)}
+  .day-breakdown{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:4px}
+  @media (max-width:640px){ .day-breakdown{grid-template-columns:repeat(2,1fr)} }
+  .db-cell{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+  .db-cell .d{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .db-cell .v{font-weight:800;font-size:16px;margin-top:2px}
+  .db-cell .p{height:6px;border-radius:99px;background:var(--line);margin-top:8px;overflow:hidden}
+  .db-cell .p i{display:block;height:100%;background:var(--green);border-radius:99px}
+
+  /* ---------- MUSIC ---------- */
+  .music-grid{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
+  @media (max-width:900px){ .music-grid{grid-template-columns:1fr} }
+  .player-card{padding:20px}
+  .now-playing{display:flex;gap:14px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+  .np-icon{flex:none;width:52px;height:52px;border-radius:12px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center}
+  .np-icon svg{width:24px;height:24px}
+  .np-icon.playing{ background:var(--accent);color:var(--accent-ink)}
+  .np-title{font-weight:700;font-size:15px;line-height:1.35;word-break:break-word}
+  .np-sub{font-size:12.5px;color:var(--muted)}
+  .transport{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 14px}
+  .t-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;justify-content:center}
+  .t-btn svg{width:19px;height:19px}
+  .t-btn.main{width:58px;height:58px;background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .t-btn.main svg{width:25px;height:25px}
+  .t-btn:hover{border-color:var(--muted)}
+  .seek-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .seek-row input[type="range"]{flex:1;accent-color:var(--accent)}
+  .vol-row{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+  .vol-row input[type="range"]{flex:1;accent-color:var(--accent)}
+  .url-row{display:flex;gap:8px}
+  .url-row .input{flex:1}
+  @media (max-width:520px){ .url-row{flex-direction:column} }
+  .src-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .src-badges span{font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink2)}
+  .queue-card{padding:18px}
+  .queue-card h3{margin:0 0 4px;font-size:16px}
+  .queue-card .hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+  .q-item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:10px 11px;margin-bottom:8px}
+  .q-item.active{border-color:var(--accent);background:var(--accent-soft)}
+  .q-badge{flex:none;font-size:10.5px;font-weight:800;letter-spacing:.03em;padding:4px 7px;border-radius:6px;color:#fff}
+  .q-badge.yt{background:#c4302b}.q-badge.sp{background:#1a7a3c}
+  .q-main{flex:1;min-width:0}
+  .q-main .u{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .q-main .s{font-size:11.5px;color:var(--muted)}
+  .q-item button{flex:none}
+  .icon-btn{border:1px solid var(--line);background:var(--surface);width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:0}
+  .icon-btn svg{width:15px;height:15px}
+  .icon-btn.del:hover{color:var(--danger);border-color:var(--danger)}
+  #spotifyBox{margin-top:16px}
+  #spotifyBox iframe{width:100%;border:0;border-radius:12px;display:block}
+  #ytHolder{position:absolute;width:2px;height:2px;overflow:hidden;opacity:.01;pointer-events:none;left:-10px;top:-10px}
+  .player-note{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.6}
+  .msg{border-radius:10px;padding:11px 13px;font-size:13.5px;margin-top:12px;display:none}
+  .msg.show{display:block}
+  .msg.err{background:var(--danger-soft);color:var(--danger)}
+  .msg.ok{background:var(--accent-soft);color:var(--ink)}
+
+  /* backup */
+  .backup-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:22px;padding:16px 18px}
+  .backup-bar p{margin:0;font-size:13.5px;color:var(--ink2);max-width:560px}
+  .backup-bar p strong{color:var(--ink)}
+
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px}
+
+  /* Modal */
+  .modal-back{
+    position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:80;display:none;
+    align-items:flex-end;justify-content:center;padding:0;
+  }
+  .modal-back.open{display:flex}
+  .modal{
+    background:var(--surface);width:100%;max-width:520px;max-height:92vh;overflow:auto;
+    border-radius:18px 18px 0 0;padding:22px;box-shadow:var(--shadow);
+  }
+  @media (min-width:640px){ .modal-back{align-items:center;padding:20px} .modal{border-radius:18px} }
+  .modal h3{margin:0 0 16px;font-size:18px}
+  .field{margin-bottom:14px}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  /* ---------- Mobile ---------- */
+  html{-webkit-text-size-adjust:100%}
+  body{overflow-x:hidden}
+  button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  img,svg,iframe{max-width:100%}
+  @media (max-width:640px){
+    .wrap{padding:14px 12px calc(64px + env(safe-area-inset-bottom))}
+    .theme-bar{justify-content:flex-start}
+    .theme-switch{display:flex;width:100%}
+    .theme-btn{flex:1 1 0;min-height:44px;padding:10px 6px;font-size:13px}
+    .hero{padding:16px 2px 4px}
+    .hero h1{font-size:29px;line-height:1.12}
+    .hero p{font-size:14.5px}
+    .hero-meta{gap:6px;margin-top:13px}
+    .pill{padding:6px 10px;font-size:12.5px}
+    .tabs{
+      top:calc(8px + env(safe-area-inset-top));margin:16px 0 18px;
+      display:grid;grid-template-columns:1fr 1fr;gap:5px;border-radius:16px;padding:5px;
+    }
+    .tab-btn{min-height:46px;padding:11px 8px;border-radius:11px;font-size:13.5px}
+    .section-head h2{font-size:20px}
+    .section-head .btn{width:100%;justify-content:center}
+    .section-head{margin-bottom:12px}
+    .btn{min-height:44px;padding:10px 14px}
+    .btn.small{min-height:38px}
+    .input,select.input,textarea.input{font-size:16px;padding:11px 12px}
+    /* Journal */
+    .entries{padding:14px}
+    .editor-top{padding:14px 14px 0}
+    .editor-top>div{flex:1 1 100%}
+    .editor-top .input{width:100%!important}
+    .toolbar{padding:10px 12px;gap:5px}
+    .toolbar select{flex:1 1 132px;max-width:none;height:42px;font-size:14px}
+    .toolbar input[type="color"]{width:42px;height:42px}
+    .tool-btn{min-width:42px;height:42px;padding:0 8px}
+    .toolbar .sep{display:none}
+    .paper-wrap{padding:12px}
+    .paper{min-height:340px;padding:10px 12px 24px 34px}
+    .paper::before{left:22px}
+    .paper-editor{min-height:300px;font-size:16px}
+    .editor-foot{padding:0 14px 14px}
+    .editor-foot>div{display:flex;width:100%}
+    .editor-foot .btn{flex:1;justify-content:center}
+    .save-state{width:100%}
+    /* Calendar */
+    .weekbar{flex-direction:column;align-items:stretch;gap:10px}
+    .weekbar>div:first-child{display:grid!important;grid-template-columns:1fr 1fr 1fr;gap:6px}
+    .weekbar .btn{padding:9px 6px;font-size:12.5px;justify-content:center}
+    .weekbar .range{text-align:left!important}
+    .day-col{min-height:0;padding:11px}
+    .check-btn{width:28px;height:28px;border-radius:8px}
+    .check-btn svg{width:15px;height:15px}
+    .add-task-btn{min-height:44px;padding:10px}
+    .task-actions button{padding:8px 8px;font-size:12.5px}
+    /* Stats */
+    .ring-card{padding:18px 14px}
+    .ring-wrap{width:168px;height:168px}
+    .ring-wrap svg{width:168px;height:168px}
+    .ring-center .pct{font-size:38px}
+    .chart-card,.list-card{padding:16px 14px}
+    .bars{gap:6px;height:132px}
+    .bar-lbl{font-size:10px}
+    .todo-row{flex-wrap:wrap}
+    .todo-row .when{min-width:0}
+    .todo-row .btn{margin-left:auto}
+    .day-breakdown{grid-template-columns:repeat(2,1fr)}
+    /* Music */
+    .player-card,.queue-card{padding:16px 14px}
+    .now-playing{flex-wrap:wrap;padding:12px}
+    .transport{gap:12px}
+    .t-btn{width:48px;height:48px}
+    .t-btn.main{width:62px;height:62px}
+    .seek-row,.vol-row{gap:8px}
+    .seek-row input[type="range"],.vol-row input[type="range"]{min-height:28px}
+    .url-row .btn{width:100%;justify-content:center}
+    /* Backup + modal */
+    .backup-bar{padding:14px}
+    .backup-bar>div{width:100%}
+    .backup-bar .btn{flex:1 1 100%;justify-content:center;text-align:center}
+    .field-row{grid-template-columns:1fr}
+    .modal{padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+    .modal-actions .btn{flex:1;justify-content:center}
+    footer{padding:0 8px}
+  }
+  @media (max-width:380px){
+    .hero h1{font-size:26px}
+    .theme-btn{font-size:12px;gap:5px}
+    .theme-btn svg{width:14px;height:14px}
+    .stat-cards{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="theme-bar">
+    <span class="theme-label" id="themeLabel">Giao diện</span>
+    <div class="theme-switch" role="group" aria-labelledby="themeLabel">
+      <button type="button" class="theme-btn" data-theme-value="light" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        Sáng
+      </button>
+      <button type="button" class="theme-btn" data-theme-value="dark" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        Tối
+      </button>
+      <button type="button" class="theme-btn active" data-theme-value="system" aria-pressed="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Hệ thống
+      </button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <h1>Sổ tay <em>nhật ký</em>, lịch tuần<br>và nhạc của riêng bạn</h1>
+    <p>Viết nhật ký mỗi ngày với font chữ tuỳ thích, xếp việc cần làm theo từng tuần, nhìn rõ mình đã hoàn thành bao nhiêu — và nghe nhạc từ YouTube hoặc Spotify trong lúc viết, chỉ có tiếng, không có video.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Hôm nay: <strong id="todayLabel">—</strong></span>
+      <span class="pill">Việc tuần này: <strong id="heroWeekStat">0 / 0 xong</strong></span>
+      <span class="pill">Trang nhật ký: <strong id="heroJournalCount">0</strong></span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Các mục chính">
+    <button class="tab-btn active" data-tab="journal" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Nhật ký
+    </button>
+    <button class="tab-btn" data-tab="calendar" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Lịch tuần
+    </button>
+    <button class="tab-btn" data-tab="stats" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Thống kê
+    </button>
+    <button class="tab-btn" data-tab="music" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      Nhạc
+    </button>
+  </nav>
+
+  <!-- ============ JOURNAL ============ -->
+  <section class="panel active" id="panel-journal">
+    <div class="section-head">
+      <div>
+        <h2>Nhật ký</h2>
+        <p>Chọn ngày, viết lên trang giấy kẻ ngang và đổi font theo tâm trạng của bạn.</p>
+      </div>
+      <button class="btn primary" id="newEntryBtn">+ Trang hôm nay</button>
+    </div>
+
+    <div class="journal-grid">
+      <aside class="card entries">
+        <h3>Các trang đã viết</h3>
+        <p class="hint">Bấm vào một trang để mở lại và sửa tiếp.</p>
+        <div id="entryList"></div>
+      </aside>
+
+      <div class="card editor-card">
+        <div class="editor-top">
+          <div>
+            <label class="lbl" for="journalDate">Ngày viết</label>
+            <input class="input" type="date" id="journalDate" style="width:auto">
+          </div>
+          <div class="grow">
+            <label class="lbl" for="journalTitle">Tiêu đề trang</label>
+            <input class="input" type="text" id="journalTitle" placeholder="Ví dụ: Một ngày bình yên…" maxlength="90">
+          </div>
+        </div>
+
+        <div class="toolbar" aria-label="Định dạng chữ">
+          <select id="fontFamily" title="Font chữ">
+            <option value="'Be Vietnam Pro', sans-serif">Be Vietnam Pro — hiện đại</option>
+            <option value="'Noto Serif', serif">Noto Serif — sách vở</option>
+            <option value="'Playfair Display', serif">Playfair — sang trọng</option>
+            <option value="'Patrick Hand', cursive">Patrick Hand — viết tay</option>
+            <option value="'Dancing Script', cursive">Dancing Script — mềm mại</option>
+            <option value="'Quicksand', sans-serif">Quicksand — tròn trịa</option>
+            <option value="'IBM Plex Mono', monospace">Plex Mono — máy đánh chữ</option>
+          </select>
+          <select id="fontSize" title="Cỡ chữ">
+            <option value="15px">15px — nhỏ</option>
+            <option value="17px" selected>17px — vừa</option>
+            <option value="19px">19px — lớn</option>
+            <option value="22px">22px — rất lớn</option>
+            <option value="26px">26px — cực lớn</option>
+          </select>
+          <span class="sep"></span>
+          <button class="tool-btn" id="fmtBold" title="In đậm"><strong>B</strong></button>
+          <button class="tool-btn" id="fmtItalic" title="In nghiêng"><em>I</em></button>
+          <button class="tool-btn" id="fmtUnderline" title="Gạch chân"><u>U</u></button>
+          <button class="tool-btn" id="fmtStrike" title="Gạch ngang"><s>S</s></button>
+          <span class="sep"></span>
+          <input type="color" id="fontColor" value="#c2410c" title="Màu chữ cho đoạn đang chọn">
+          <button class="tool-btn" id="applyColor" title="Áp dụng màu chữ" style="font-size:12px">Màu chữ</button>
+          <span class="sep"></span>
+          <button class="tool-btn" id="alignLeft" title="Căn trái"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg></button>
+          <button class="tool-btn" id="alignCenter" title="Căn giữa"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="18" y1="18" x2="6" y2="18"/></svg></button>
+          <button class="tool-btn" id="clearFmt" title="Xoá định dạng đoạn đang chọn" style="font-size:12px">Xoá kiểu</button>
+        </div>
+
+        <div class="paper-wrap">
+          <div class="paper">
+            <div class="paper-editor" id="paperEditor" contenteditable="true" spellcheck="false"
+                 data-placeholder="Hôm nay của bạn thế nào? Cứ viết ra đây, dòng này nối dòng kia…"></div>
+          </div>
+        </div>
+
+        <div class="editor-foot">
+          <span class="save-state" id="saveState">Chưa lưu trang này</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn danger" id="deleteEntryBtn">Xoá trang</button>
+            <button class="btn primary" id="saveEntryBtn">Lưu nhật ký</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CALENDAR ============ -->
+  <section class="panel" id="panel-calendar">
+    <div class="section-head">
+      <div>
+        <h2>Lịch tuần</h2>
+        <p>Thêm việc cần làm cho từng ngày, bấm vào ô vuông khi đã làm xong.</p>
+      </div>
+      <button class="btn primary" id="addTaskTopBtn">+ Thêm việc</button>
+    </div>
+
+    <div class="weekbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="prevWeekBtn">← Tuần trước</button>
+        <button class="btn" id="thisWeekBtn">Tuần này</button>
+        <button class="btn" id="nextWeekBtn">Tuần sau →</button>
+      </div>
+      <div class="range" style="text-align:right">
+        <span id="weekRangeSub">Tuần</span>
+        <span id="weekRangeMain" style="display:inline;font-size:17px;color:var(--ink)">—</span>
+      </div>
+    </div>
+
+    <div class="week-grid" id="weekGrid"></div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="panel" id="panel-stats">
+    <div class="section-head">
+      <div>
+        <h2>Thống kê hoàn thành</h2>
+        <p>Tính trực tiếp từ những việc bạn đã ghi trong lịch tuần.</p>
+      </div>
+      <button class="btn" id="statsThisWeekBtn">Về tuần này</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="card ring-card">
+        <div class="ring-wrap">
+          <svg width="190" height="190" viewBox="0 0 190 190">
+            <circle cx="95" cy="95" r="80" fill="none" stroke="var(--line)" stroke-width="14"/>
+            <circle id="ringFg" cx="95" cy="95" r="80" fill="none" stroke="var(--green)" stroke-width="14"
+                    stroke-linecap="round" stroke-dasharray="502.65" stroke-dashoffset="502.65"/>
+          </svg>
+          <div class="ring-center">
+            <div class="pct" id="ringPct">0%</div>
+            <div class="lbl" id="ringLbl">của tuần đang xem</div>
+          </div>
+        </div>
+        <div style="font-weight:700" id="ringDetail">Chưa có việc nào trong tuần này</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px" id="ringWeekLabel">—</div>
+      </div>
+
+      <div>
+        <div class="stat-cards">
+          <div class="card stat-card">
+            <div class="num" id="statToday">0 <small>/ 0</small></div>
+            <div class="cap">Việc hôm nay đã xong / tổng số việc hôm nay</div>
+          </div>
+          <div class="card stat-card warn">
+            <div class="num" id="statOverdue">0</div>
+            <div class="cap">Việc quá hạn chưa xong (trước hôm nay)</div>
+          </div>
+          <div class="card stat-card">
+            <div class="num" id="statAll">0%</div>
+            <div class="cap" id="statAllCap">Tỉ lệ hoàn thành toàn bộ các tuần</div>
+          </div>
+          <div class="card stat-card">
+            <div class="num" id="statStreak">0</div>
+            <div class="cap">Ngày liên tiếp gần nhất có ít nhất 1 việc đã xong</div>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <h3>Tỉ lệ hoàn thành theo ngày — tuần đang xem</h3>
+          <p class="sub">Mỗi ô là một ngày trong tuần bạn đang mở ở mục Lịch tuần.</p>
+          <div class="day-breakdown" id="dayBreakdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>8 tuần gần đây</h3>
+      <p class="sub">Phần trăm việc đã xong của từng tuần. Cột màu cam là tuần hiện tại.</p>
+      <div class="bars" id="weekBars"></div>
+    </div>
+
+    <div class="card list-card">
+      <h3>Việc chưa xong</h3>
+      <p class="sub">Việc quá hạn nằm trên cùng. Bấm “Đã xong” để đánh dấu ngay tại đây.</p>
+      <div id="pendingList"></div>
+    </div>
+  </section>
+
+  <!-- ============ MUSIC ============ -->
+  <section class="panel" id="panel-music">
+    <div class="section-head">
+      <div>
+        <h2>Nghe nhạc</h2>
+        <p>Dán link YouTube hoặc Spotify vào danh sách phát. YouTube chỉ phát tiếng qua trình phát ẩn — không hiện video.</p>
+      </div>
+    </div>
+
+    <div class="music-grid">
+      <div class="card player-card">
+        <div class="now-playing">
+          <div class="np-icon" id="npIcon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div style="min-width:0;flex:1">
+            <div class="np-title" id="npTitle">Chưa phát bài nào</div>
+            <div class="np-sub" id="npSub">Thêm một link bên dưới rồi bấm phát — nhạc vẫn chạy khi bạn chuyển sang viết nhật ký.</div>
+          </div>
+        </div>
+
+        <!-- YouTube transport -->
+        <div id="ytControls">
+          <div class="transport">
+            <button class="t-btn" id="prevTrackBtn" title="Bài trước"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.4"/></svg></button>
+            <button class="t-btn main" id="playPauseBtn" title="Phát / Tạm dừng">
+              <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg>
+              <svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="4" width="4.5" height="16" rx="1"/><rect x="14.5" y="4" width="4.5" height="16" rx="1"/></svg>
+            </button>
+            <button class="t-btn" id="nextTrackBtn" title="Bài tiếp"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.4"/></svg></button>
+          </div>
+          <div class="seek-row">
+            <span id="curTime">0:00</span>
+            <input type="range" id="seekBar" min="0" max="100" value="0" step="0.1" aria-label="Tua bài hát">
+            <span id="durTime">0:00</span>
+          </div>
+          <div class="vol-row">
+            <span>Âm lượng</span>
+            <input type="range" id="volBar" min="0" max="100" value="80" aria-label="Âm lượng YouTube">
+            <span id="volVal">80%</span>
+          </div>
+          <p class="player-note" id="ytNote">Điều khiển phát / dừng, chuyển bài, tua và âm lượng ở trên dành cho bài YouTube. Một số video bị chủ sở hữu cấm nhúng sẽ không phát được — hãy thử link khác.</p>
+        </div>
+
+        <!-- Spotify embed -->
+        <div id="spotifyBox" style="display:none">
+          <div id="spotifyMount"></div>
+          <p class="player-note">Bài Spotify phát bằng khung phát chính thức của Spotify — bấm nút phát ngay trong khung. Bản nghe thử hay bản đầy đủ tuỳ vào việc bạn có đăng nhập Spotify hay không.</p>
+        </div>
+
+        <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:18px">
+          <label class="lbl" for="musicUrl">Dán link nhạc vào đây</label>
+          <div class="url-row">
+            <input class="input" type="url" id="musicUrl" placeholder="https://www.youtube.com/watch?v=… hoặc https://open.spotify.com/track/…">
+            <button class="btn primary" id="addMusicBtn">+ Thêm vào danh sách</button>
+          </div>
+          <div class="src-badges">
+            <span>YouTube: watch · youtu.be · shorts · playlist</span>
+            <span>Spotify: bài hát · album · playlist · podcast</span>
+          </div>
+          <div class="msg" id="musicMsg"></div>
+        </div>
+      </div>
+
+      <aside class="card queue-card">
+        <h3>Danh sách phát</h3>
+        <p class="hint">Bấm ▶ để phát một bài. Hết bài YouTube, bài tiếp theo trong danh sách sẽ tự phát.</p>
+        <div id="queueList"></div>
+      </aside>
+    </div>
+
+    <div id="ytHolder"><div id="ytPlayer"></div></div>
+  </section>
+
+  <!-- Backup -->
+  <div class="card backup-bar">
+    <p><strong>Sao lưu dữ liệu của bạn:</strong> bản tĩnh này giữ nhật ký, lịch và danh sách nhạc trong lúc trang đang mở. Hãy tải file sao lưu xuống và cất cùng file HTML — khi mở lại trang, dùng nút “Nhập lại sao lưu” để khôi phục, hoặc khi đưa lên GitHub cho nhiều thiết bị dùng chung.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="exportBtn">⬇ Tải sao lưu (.json)</button>
+      <label class="btn" for="importFile" style="cursor:pointer">⬆ Nhập lại sao lưu</label>
+      <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+    </div>
+  </div>
+
+  <footer>Sổ tay cá nhân — viết, lên kế hoạch và nghe nhạc trong cùng một trang.</footer>
+</div>
+
+<!-- Task modal -->
+<div class="modal-back" id="taskModalBack">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+    <h3 id="taskModalTitle">Thêm việc</h3>
+    <div class="field">
+      <label class="lbl" for="taskTitle">Tên việc *</label>
+      <input class="input" type="text" id="taskTitle" placeholder="Ví dụ: Nộp bài tập, đi chợ, tập thể dục…" maxlength="120">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="lbl" for="taskDate">Ngày</label>
+        <input class="input" type="date" id="taskDate">
+      </div>
+      <div class="field">
+        <label class="lbl" for="taskTime">Giờ (không bắt buộc)</label>
+        <input class="input" type="time" id="taskTime">
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="taskNote">Ghi chú</label>
+      <textarea class="input" id="taskNote" rows="3" placeholder="Chi tiết thêm, địa điểm, cần mang theo gì…" maxlength="400"></textarea>
+    </div>
+    <div class="msg" id="taskMsg"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="taskCancelBtn">Huỷ</button>
+      <button class="btn primary" id="taskSaveBtn">Lưu việc</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+(function(){
+"use strict";
+
+/* ================= Helpers ================= */
+function $(id){ return document.getElementById(id); }
+function pad(n){ return String(n).padStart(2,"0"); }
+function toISO(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function parseISO(s){ var p=s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+function todayISO(){ return toISO(new Date()); }
+function fmtDateVN(iso){
+  var d=parseISO(iso), days=["Chủ nhật","Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7"];
+  return days[d.getDay()]+" · "+pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear();
+}
+function fmtShort(iso){ var d=parseISO(iso); return pad(d.getDate())+"/"+pad(d.getMonth()+1); }
+function mondayOf(date){
+  var d=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+  var dow=(d.getDay()+6)%7; d.setDate(d.getDate()-dow); return d;
+}
+function addDays(date,n){ var d=new Date(date); d.setDate(d.getDate()+n); return d; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function fmtTime(sec){ if(!isFinite(sec)||sec<0) sec=0; sec=Math.floor(sec); return Math.floor(sec/60)+":"+pad(sec%60); }
+var uidSeq=1;
+function uid(){ return "id"+Date.now().toString(36)+(uidSeq++)+Math.random().toString(36).slice(2,6); }
+
+/* ================= State (in-memory) ================= */
+var state = {
+  journal: {},   // iso -> {title, html, fontFamily, fontSize, updatedAt}
+  tasks: [],     // {id, date, title, time, note, done}
+  queue: [],     // {id, source, url, videoId, spType, spId, label}
+  weekOffset: 0,
+  editingTaskId: null,
+  currentTrackId: null
+};
+
+/* ================= Theme: light / dark / system ================= */
+var themeBtns=document.querySelectorAll(".theme-btn");
+var systemDarkQuery=window.matchMedia("(prefers-color-scheme: dark)");
+function resolvedTheme(value){
+  if(value==="dark") return "dark";
+  if(value==="light") return "light";
+  return systemDarkQuery.matches ? "dark" : "light";
+}
+function applyTheme(value){
+  if(value!=="light" && value!=="dark") value="system";
+  document.documentElement.setAttribute("data-theme", value);
+  themeBtns.forEach(function(b){
+    var on=b.getAttribute("data-theme-value")===value;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  var meta=$("themeColorMeta");
+  if(meta) meta.setAttribute("content", resolvedTheme(value)==="dark" ? "#171410" : "#faf6ee");
+}
+themeBtns.forEach(function(b){
+  b.addEventListener("click",function(){ applyTheme(b.getAttribute("data-theme-value")); });
+});
+if(typeof systemDarkQuery.addEventListener==="function"){
+  systemDarkQuery.addEventListener("change",function(){
+    if(document.documentElement.getAttribute("data-theme")==="system") applyTheme("system");
+  });
+}else if(typeof systemDarkQuery.addListener==="function"){
+  systemDarkQuery.addListener(function(){
+    if(document.documentElement.getAttribute("data-theme")==="system") applyTheme("system");
+  });
+}
+applyTheme(document.documentElement.getAttribute("data-theme") || "system");
+
+/* ================= Tabs ================= */
+var tabBtns=document.querySelectorAll(".tab-btn");
+tabBtns.forEach(function(btn){
+  btn.addEventListener("click",function(){
+    tabBtns.forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("active"); });
+    $("panel-"+btn.getAttribute("data-tab")).classList.add("active");
+    if(btn.getAttribute("data-tab")==="stats") renderStats();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+function goTab(name){
+  tabBtns.forEach(function(b){ if(b.getAttribute("data-tab")===name) b.click(); });
+}
+
+/* ================= JOURNAL ================= */
+var editor=$("paperEditor");
+var currentJournalISO=todayISO();
+
+function applyEditorStyle(entry){
+  var fam = entry && entry.fontFamily ? entry.fontFamily : "'Be Vietnam Pro', sans-serif";
+  var size = entry && entry.fontSize ? entry.fontSize : "17px";
+  editor.style.fontFamily=fam; editor.style.fontSize=size;
+  $("fontFamily").value=fam; $("fontSize").value=size;
+}
+function loadJournalDay(iso){
+  currentJournalISO=iso;
+  $("journalDate").value=iso;
+  var e=state.journal[iso];
+  $("journalTitle").value = e ? e.title : "";
+  editor.innerHTML = e ? e.html : "";
+  applyEditorStyle(e);
+  setSaveState(e ? "Đã lưu · "+e.updatedAt : "Chưa lưu trang này", !!e);
+  renderEntryList();
+}
+function setSaveState(txt, saved){
+  var el=$("saveState"); el.textContent=txt; el.className="save-state"+(saved?" saved":"");
+}
+function renderEntryList(){
+  var list=$("entryList");
+  var keys=Object.keys(state.journal).sort().reverse();
+  $("heroJournalCount").textContent=keys.length;
+  if(!keys.length){
+    list.innerHTML='<div class="empty-note">Chưa có trang nào.<br>Viết trang đầu tiên của bạn hôm nay nhé.</div>';
+    return;
+  }
+  list.innerHTML=keys.map(function(iso){
+    var e=state.journal[iso];
+    var tmp=document.createElement("div"); tmp.innerHTML=e.html||"";
+    var snippet=(tmp.textContent||"").trim().slice(0,90);
+    return '<button class="entry-item'+(iso===currentJournalISO?" active":"")+'" data-iso="'+iso+'">'
+      +'<span class="d"><span>'+esc(fmtShort(iso))+'</span><span>'+esc(parseISO(iso).toLocaleDateString("vi-VN",{weekday:"short"}))+'</span></span>'
+      +'<span class="t">'+esc(e.title||"(Chưa có tiêu đề)")+'</span>'
+      +'<span class="s">'+esc(snippet||"Trang trống")+'</span></button>';
+  }).join("");
+  list.querySelectorAll(".entry-item").forEach(function(b){
+    b.addEventListener("click",function(){ loadJournalDay(b.getAttribute("data-iso")); });
+  });
+}
+$("saveEntryBtn").addEventListener("click",function(){
+  var now=new Date();
+  state.journal[currentJournalISO]={
+    title:$("journalTitle").value.trim(),
+    html:editor.innerHTML,
+    fontFamily:$("fontFamily").value,
+    fontSize:$("fontSize").value,
+    updatedAt:pad(now.getHours())+":"+pad(now.getMinutes())+" · "+fmtShort(currentJournalISO)
+  };
+  setSaveState("Đã lưu · "+state.journal[currentJournalISO].updatedAt, true);
+  renderEntryList();
+});
+$("deleteEntryBtn").addEventListener("click",function(){
+  if(!state.journal[currentJournalISO]){ setSaveState("Trang này chưa được lưu nên không có gì để xoá.",false); return; }
+  delete state.journal[currentJournalISO];
+  loadJournalDay(currentJournalISO);
+  setSaveState("Đã xoá trang của ngày này.",false);
+});
+$("journalDate").addEventListener("change",function(){ if(this.value) loadJournalDay(this.value); });
+$("newEntryBtn").addEventListener("click",function(){ loadJournalDay(todayISO()); editor.focus(); });
+$("fontFamily").addEventListener("change",function(){ editor.style.fontFamily=this.value; markDirty(); });
+$("fontSize").addEventListener("change",function(){ editor.style.fontSize=this.value; markDirty(); });
+editor.addEventListener("input",markDirty);
+$("journalTitle").addEventListener("input",markDirty);
+function markDirty(){ setSaveState("Đang viết… chưa lưu", false); }
+
+function exec(cmd,val){ document.execCommand(cmd,false,val||null); editor.focus(); }
+$("fmtBold").addEventListener("click",function(){ exec("bold"); this.classList.toggle("on"); });
+$("fmtItalic").addEventListener("click",function(){ exec("italic"); this.classList.toggle("on"); });
+$("fmtUnderline").addEventListener("click",function(){ exec("underline"); this.classList.toggle("on"); });
+$("fmtStrike").addEventListener("click",function(){ exec("strikeThrough"); this.classList.toggle("on"); });
+$("alignLeft").addEventListener("click",function(){ exec("justifyLeft"); });
+$("alignCenter").addEventListener("click",function(){ exec("justifyCenter"); });
+$("clearFmt").addEventListener("click",function(){ exec("removeFormat"); });
+$("applyColor").addEventListener("click",function(){ exec("foreColor",$("fontColor").value); markDirty(); });
+
+/* ================= CALENDAR / TASKS ================= */
+function weekDates(offset){
+  var mon=mondayOf(new Date()); mon=addDays(mon, offset*7);
+  var arr=[]; for(var i=0;i<7;i++) arr.push(addDays(mon,i));
+  return arr;
+}
+function tasksOn(iso){ return state.tasks.filter(function(t){ return t.date===iso; })
+  .sort(function(a,b){ return (a.time||"99") < (b.time||"99") ? -1 : 1; }); }
+
+function renderWeek(){
+  var dates=weekDates(state.weekOffset);
+  var dowNames=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
+  var first=dates[0], last=dates[6];
+  $("weekRangeMain").textContent = pad(first.getDate())+"/"+pad(first.getMonth()+1)+" — "+pad(last.getDate())+"/"+pad(last.getMonth()+1)+"/"+last.getFullYear();
+  $("weekRangeSub").textContent = state.weekOffset===0 ? "Tuần này" : (state.weekOffset<0 ? "Tuần đã qua ("+state.weekOffset+")" : "Tuần sắp tới (+"+state.weekOffset+")");
+  var tISO=todayISO();
+  $("weekGrid").innerHTML=dates.map(function(d,idx){
+    var iso=toISO(d), list=tasksOn(iso), isToday=iso===tISO;
+    var tasksHtml = list.length ? list.map(function(t){
+      return '<div class="task'+(t.done?" done":"")+'" data-id="'+t.id+'">'
+        +'<div class="task-top">'
+        +'<button class="check-btn" data-act="toggle" aria-label="Đánh dấu đã xong"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'
+        +'<div style="flex:1;min-width:0"><div class="task-title">'+esc(t.title)+'</div>'
+        +(t.time?'<div class="task-meta">🕐 '+esc(t.time)+'</div>':"")
+        +(t.note?'<div class="task-note">'+esc(t.note)+'</div>':"")
+        +'</div></div>'
+        +'<div class="task-actions"><button data-act="edit">Sửa</button><button data-act="del" class="del">Xoá</button></div>'
+        +'</div>';
+    }).join("") : '<div class="day-empty">Chưa có việc nào</div>';
+    return '<div class="day-col'+(isToday?" today":"")+'">'
+      +'<div class="day-head"><div><div class="dow">'+dowNames[idx]+'</div><div class="dnum">'+d.getDate()+'</div></div>'
+      +(isToday?'<span class="today-tag">Hôm nay</span>':"")+'</div>'
+      + tasksHtml
+      +'<button class="add-task-btn" data-add="'+iso+'">+ Thêm việc</button></div>';
+  }).join("");
+
+  $("weekGrid").querySelectorAll("[data-add]").forEach(function(b){
+    b.addEventListener("click",function(){ openTaskModal(null, b.getAttribute("data-add")); });
+  });
+  $("weekGrid").querySelectorAll(".task").forEach(function(card){
+    var id=card.getAttribute("data-id");
+    card.querySelectorAll("button[data-act]").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        var act=btn.getAttribute("data-act");
+        if(act==="toggle"){ toggleTask(id); }
+        else if(act==="del"){ state.tasks=state.tasks.filter(function(t){return t.id!==id;}); refreshAll(); }
+        else if(act==="edit"){ var t=state.tasks.find(function(x){return x.id===id;}); if(t) openTaskModal(t, t.date); }
+      });
+    });
+  });
+  updateHeroStats();
+}
+function toggleTask(id){
+  var t=state.tasks.find(function(x){return x.id===id;});
+  if(t){ t.done=!t.done; refreshAll(); }
+}
+$("prevWeekBtn").addEventListener("click",function(){ state.weekOffset--; renderWeek(); });
+$("nextWeekBtn").addEventListener("click",function(){ state.weekOffset++; renderWeek(); });
+$("thisWeekBtn").addEventListener("click",function(){ state.weekOffset=0; renderWeek(); });
+$("statsThisWeekBtn").addEventListener("click",function(){ state.weekOffset=0; renderWeek(); renderStats(); });
+$("addTaskTopBtn").addEventListener("click",function(){
+  var dates=weekDates(state.weekOffset).map(toISO);
+  var def=dates.indexOf(todayISO())>=0 ? todayISO() : dates[0];
+  openTaskModal(null, def);
+});
+
+/* Task modal */
+function openTaskModal(task, dateISO){
+  state.editingTaskId = task ? task.id : null;
+  $("taskModalTitle").textContent = task ? "Sửa việc" : "Thêm việc mới";
+  $("taskTitle").value = task ? task.title : "";
+  $("taskDate").value = task ? task.date : dateISO;
+  $("taskTime").value = task ? (task.time||"") : "";
+  $("taskNote").value = task ? (task.note||"") : "";
+  showTaskMsg("", "");
+  $("taskModalBack").classList.add("open");
+  setTimeout(function(){ $("taskTitle").focus(); },60);
+}
+function closeTaskModal(){ $("taskModalBack").classList.remove("open"); }
+function showTaskMsg(txt, kind){
+  var m=$("taskMsg"); m.textContent=txt; m.className="msg"+(txt?" show "+kind:"");
+}
+$("taskCancelBtn").addEventListener("click",closeTaskModal);
+$("taskModalBack").addEventListener("click",function(e){ if(e.target===this) closeTaskModal(); });
+$("taskSaveBtn").addEventListener("click",function(){
+  var title=$("taskTitle").value.trim(), date=$("taskDate").value;
+  if(!title){ showTaskMsg("Bạn chưa nhập tên việc.","err"); return; }
+  if(!date){ showTaskMsg("Bạn chưa chọn ngày.","err"); return; }
+  if(state.editingTaskId){
+    var t=state.tasks.find(function(x){return x.id===state.editingTaskId;});
+    if(t){ t.title=title; t.date=date; t.time=$("taskTime").value; t.note=$("taskNote").value.trim(); }
+  }else{
+    state.tasks.push({ id:uid(), date:date, title:title, time:$("taskTime").value, note:$("taskNote").value.trim(), done:false });
+  }
+  // jump calendar to the week containing this task
+  var mon=mondayOf(new Date());
+  var diffDays=Math.round((mondayOf(parseISO(date))-mon)/86400000);
+  state.weekOffset=Math.round(diffDays/7);
+  closeTaskModal(); refreshAll();
+});
+
+/* ================= STATS ================= */
+function pctOf(list){ if(!list.length) return 0; var d=list.filter(function(t){return t.done;}).length; return Math.round(d/list.length*100); }
+function updateHeroStats(){
+  var dates=weekDates(0).map(toISO);
+  var weekTasks=state.tasks.filter(function(t){ return dates.indexOf(t.date)>=0; });
+  var done=weekTasks.filter(function(t){return t.done;}).length;
+  $("heroWeekStat").textContent=done+" / "+weekTasks.length+" xong";
+  $("todayLabel").textContent=fmtDateVN(todayISO());
+}
+function renderStats(){
+  var dates=weekDates(state.weekOffset), isos=dates.map(toISO);
+  var weekTasks=state.tasks.filter(function(t){ return isos.indexOf(t.date)>=0; });
+  var done=weekTasks.filter(function(t){return t.done;}).length;
+  var pct=pctOf(weekTasks);
+  var C=502.65;
+  $("ringFg").style.strokeDashoffset = String(C - C*pct/100);
+  $("ringPct").textContent=pct+"%";
+  $("ringDetail").textContent = weekTasks.length ? (done+" / "+weekTasks.length+" việc đã xong") : "Chưa có việc nào trong tuần này";
+  $("ringWeekLabel").textContent = fmtShort(isos[0])+" — "+fmtShort(isos[6])+" · "+(state.weekOffset===0?"Tuần này":"Tuần "+(state.weekOffset>0?"+"+state.weekOffset:state.weekOffset));
+
+  var tISO=todayISO(), todayTasks=tasksOn(tISO);
+  var todayDone=todayTasks.filter(function(t){return t.done;}).length;
+  $("statToday").innerHTML=todayDone+' <small>/ '+todayTasks.length+"</small>";
+  var overdue=state.tasks.filter(function(t){ return !t.done && t.date<tISO; });
+  $("statOverdue").textContent=overdue.length;
+  $("statAll").textContent=pctOf(state.tasks)+"%";
+  $("statAllCap").textContent="Tỉ lệ hoàn thành toàn bộ · "+state.tasks.filter(function(t){return t.done;}).length+"/"+state.tasks.length+" việc";
+
+  // streak: consecutive days ending today (or yesterday) with >=1 done task
+  var streak=0, cursor=new Date();
+  var hasDone=function(iso){ return state.tasks.some(function(t){return t.date===iso && t.done;}); };
+  if(!hasDone(toISO(cursor))) cursor=addDays(cursor,-1);
+  while(hasDone(toISO(cursor))){ streak++; cursor=addDays(cursor,-1); }
+  $("statStreak").textContent=streak;
+
+  // day breakdown
+  var dowNames=["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","CN"];
+  $("dayBreakdown").innerHTML=isos.map(function(iso,i){
+    var list=tasksOn(iso), p=pctOf(list), dn=list.filter(function(t){return t.done;}).length;
+    return '<div class="db-cell"><div class="d">'+dowNames[i]+' '+fmtShort(iso)+'</div>'
+      +'<div class="v">'+(list.length? dn+"/"+list.length : "—")+'</div>'
+      +'<div class="p"><i style="width:'+p+'%"></i></div></div>';
+  }).join("");
+
+  // 8 week bars
+  var barsHtml="";
+  for(var w=-7; w<=0; w++){
+    var wd=weekDates(w).map(toISO);
+    var wt=state.tasks.filter(function(t){ return wd.indexOf(t.date)>=0; });
+    var p=pctOf(wt);
+    barsHtml+='<div class="bar-col"><div class="bar-val">'+(wt.length? p+"%" : "—")+'</div>'
+      +'<div class="bar'+(w===0?" cur":"")+'" style="height:'+Math.max(p,2)+'%" title="'+p+'%"></div>'
+      +'<div class="bar-lbl">'+fmtShort(wd[0])+"<br>"+fmtShort(wd[6])+"</div></div>";
+  }
+  $("weekBars").innerHTML=barsHtml;
+
+  // pending list: overdue first, then by date
+  var pending=state.tasks.filter(function(t){return !t.done;}).slice().sort(function(a,b){
+    return a.date<b.date?-1 : a.date>b.date?1 : (a.time||"")<(b.time||"")?-1:1;
+  });
+  if(!pending.length){
+    $("pendingList").innerHTML='<div class="empty-note">Không còn việc nào chưa xong. Tuyệt vời!</div>';
+  }else{
+    $("pendingList").innerHTML=pending.slice(0,30).map(function(t){
+      var od=t.date<tISO;
+      return '<div class="todo-row'+(od?" overdue":"")+'">'
+        +'<span class="when">'+(od?"Quá hạn · ":"")+fmtShort(t.date)+(t.time?" · "+esc(t.time):"")+'</span>'
+        +'<div style="flex:1;min-width:0"><div class="tt">'+esc(t.title)+'</div>'
+        +(t.note?'<div class="tm">'+esc(t.note)+'</div>':"")+'</div>'
+        +'<button class="btn small" data-done="'+t.id+'">Đã xong</button></div>';
+    }).join("");
+    $("pendingList").querySelectorAll("[data-done]").forEach(function(b){
+      b.addEventListener("click",function(){ toggleTask(b.getAttribute("data-done")); renderStats(); });
+    });
+  }
+  updateHeroStats();
+}
+function refreshAll(){ renderWeek(); renderStats(); }
+
+/* ================= MUSIC ================= */
+function parseMusicUrl(raw){
+  var url=(raw||"").trim(); if(!url) return null;
+  // Spotify URI
+  var spUri=url.match(/^spotify:(track|album|playlist|episode|show):([A-Za-z0-9]+)/);
+  if(spUri) return { source:"spotify", spType:spUri[1], spId:spUri[2], label:"Spotify · "+spUri[1] };
+  var u;
+  try{ u=new URL(url); }catch(e){ return null; }
+  var host=u.hostname.replace(/^www\./,"");
+  if(host==="youtube.com"||host==="m.youtube.com"||host==="music.youtube.com"){
+    var v=u.searchParams.get("v");
+    if(v) return { source:"youtube", videoId:v, label:"YouTube · video" };
+    var seg=u.pathname.split("/").filter(Boolean);
+    if((seg[0]==="shorts"||seg[0]==="embed"||seg[0]==="live")&&seg[1]) return { source:"youtube", videoId:seg[1], label:"YouTube · "+seg[0] };
+    var list=u.searchParams.get("list");
+    if(list) return { source:"youtube", listId:list, label:"YouTube · playlist" };
+    return null;
+  }
+  if(host==="youtu.be"){
+    var id=u.pathname.split("/").filter(Boolean)[0];
+    if(id) return { source:"youtube", videoId:id, label:"YouTube · video" };
+    return null;
+  }
+  if(host==="open.spotify.com"){
+    var seg2=u.pathname.split("/").filter(Boolean);
+    // handle /intl-xx/ prefix
+    if(seg2[0] && seg2[0].indexOf("intl-")===0) seg2.shift();
+    if(seg2[0]==="embed") seg2.shift();
+    var types=["track","album","playlist","episode","show"];
+    if(types.indexOf(seg2[0])>=0 && seg2[1]) return { source:"spotify", spType:seg2[0], spId:seg2[1].split("?")[0], label:"Spotify · "+seg2[0] };
+    return null;
+  }
+  return null;
+}
+function showMusicMsg(txt,kind){ var m=$("musicMsg"); m.textContent=txt; m.className="msg"+(txt?" show "+kind:""); }
+
+function renderQueue(){
+  var box=$("queueList");
+  if(!state.queue.length){
+    box.innerHTML='<div class="empty-note">Danh sách đang trống.<br>Dán link YouTube hoặc Spotify để thêm bài đầu tiên.</div>';
+    return;
+  }
+  box.innerHTML=state.queue.map(function(q,i){
+    var active=q.id===state.currentTrackId;
+    return '<div class="q-item'+(active?" active":"")+'">'
+      +'<span class="q-badge '+(q.source==="youtube"?"yt":"sp")+'">'+(q.source==="youtube"?"YT":"SP")+'</span>'
+      +'<div class="q-main"><div class="u">'+esc(q.url)+'</div><div class="s">'+(i+1)+". "+esc(q.label)+(active?" · đang phát":"")+'</div></div>'
+      +'<button class="icon-btn" data-play="'+q.id+'" title="Phát bài này"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg></button>'
+      +'<button class="icon-btn del" data-del="'+q.id+'" title="Xoá khỏi danh sách"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>'
+      +'</div>';
+  }).join("");
+  box.querySelectorAll("[data-play]").forEach(function(b){ b.addEventListener("click",function(){ playTrack(b.getAttribute("data-play"), true); }); });
+  box.querySelectorAll("[data-del]").forEach(function(b){
+    b.addEventListener("click",function(){
+      var id=b.getAttribute("data-del");
+      state.queue=state.queue.filter(function(q){return q.id!==id;});
+      if(state.currentTrackId===id){ stopAllPlayback(); state.currentTrackId=null; setNowPlaying(null); }
+      renderQueue();
+    });
+  });
+}
+function addMusicFromInput(){
+  var raw=$("musicUrl").value;
+  var parsed=parseMusicUrl(raw);
+  if(!parsed){ showMusicMsg("Link này chưa đúng định dạng YouTube hoặc Spotify. Hãy copy link từ nút Chia sẻ của bài hát rồi dán lại nhé.","err"); return; }
+  parsed.id=uid(); parsed.url=raw.trim();
+  state.queue.push(parsed);
+  $("musicUrl").value="";
+  showMusicMsg("Đã thêm vào danh sách phát. Bấm ▶ ở bài bạn muốn nghe.","ok");
+  renderQueue();
+  playTrack(parsed.id, true);
+}
+$("addMusicBtn").addEventListener("click",addMusicFromInput);
+$("musicUrl").addEventListener("keydown",function(e){ if(e.key==="Enter") addMusicFromInput(); });
+
+function setNowPlaying(track, playing){
+  if(!track){
+    $("npTitle").textContent="Chưa phát bài nào";
+    $("npSub").textContent="Thêm một link bên dưới rồi bấm phát — nhạc vẫn chạy khi bạn chuyển sang viết nhật ký.";
+    $("npIcon").classList.remove("playing");
+    $("playIcon").style.display=""; $("pauseIcon").style.display="none";
+    return;
+  }
+  $("npTitle").textContent=track.label;
+  $("npSub").textContent=track.url;
+  $("npIcon").classList.toggle("playing", !!playing);
+  $("playIcon").style.display=playing?"none":"";
+  $("pauseIcon").style.display=playing?"":"none";
+}
+
+/* ---- YouTube hidden player ---- */
+var ytPlayer=null, ytReady=false, ytIsPlaying=false, pendingYtTrack=null, seekTimer=null;
+window.onYouTubeIframeAPIReady=function(){
+  ytPlayer=new YT.Player("ytPlayer",{
+    width:"2", height:"2",
+    playerVars:{ playsinline:1, controls:0, disablekb:1, rel:0 },
+    events:{
+      onReady:function(){ ytReady=true; ytPlayer.setVolume(+$("volBar").value); if(pendingYtTrack){ loadYtTrack(pendingYtTrack); pendingYtTrack=null; } startSeekTimer(); },
+      onStateChange:function(e){
+        if(e.data===YT.PlayerState.PLAYING){ ytIsPlaying=true; var t=currentTrack(); setNowPlaying(t,true); renderQueue(); }
+        else if(e.data===YT.PlayerState.PAUSED){ ytIsPlaying=false; var t2=currentTrack(); if(t2&&t2.source==="youtube") setNowPlaying(t2,false); }
+        else if(e.data===YT.PlayerState.ENDED){ playNextAuto(); }
+      },
+      onError:function(){ showMusicMsg("YouTube không phát được bài này (có thể video bị cấm nhúng hoặc bị giới hạn khu vực). Hãy thử bài tiếp theo.","err"); ytIsPlaying=false; }
+    }
+  });
+};
+function startSeekTimer(){
+  if(seekTimer) return;
+  seekTimer=setInterval(function(){
+    var t=currentTrack();
+    if(ytPlayer && ytReady && t && t.source==="youtube" && ytPlayer.getDuration){
+      try{
+        var dur=ytPlayer.getDuration()||0, cur=ytPlayer.getCurrentTime()||0;
+        if(document.activeElement!==$("seekBar")) $("seekBar").value=dur? (cur/dur*100):0;
+        $("curTime").textContent=fmtTime(cur); $("durTime").textContent=fmtTime(dur);
+      }catch(e){}
+    }
+  },500);
+}
+function currentTrack(){ return state.queue.find(function(q){return q.id===state.currentTrackId;})||null; }
+function loadYtTrack(track){
+  if(!ytReady || !ytPlayer){ pendingYtTrack=track; return; }
+  if(track.listId && !track.videoId){ ytPlayer.loadPlaylist({list:track.listId, listType:"playlist"}); }
+  else{ ytPlayer.loadVideoById(track.videoId); }
+}
+function stopSpotify(){
+  $("spotifyBox").style.display="none";
+  $("spotifyMount").innerHTML="";
+  $("ytControls").style.display="";
+  $("ytNote").style.display="";
+}
+function stopYoutube(){
+  if(ytPlayer && ytReady){ try{ ytPlayer.stopVideo(); }catch(e){} }
+  ytIsPlaying=false;
+}
+function stopAllPlayback(){ stopYoutube(); stopSpotify(); }
+
+function playTrack(id, autoplay){
+  var track=state.queue.find(function(q){return q.id===id;});
+  if(!track) return;
+  state.currentTrackId=id;
+  if(track.source==="youtube"){
+    stopSpotify();
+    setNowPlaying(track,false);
+    loadYtTrack(track);
+  }else{
+    stopYoutube();
+    $("ytControls").style.display="none";
+    $("spotifyBox").style.display="";
+    $("spotifyMount").innerHTML='<iframe src="https://open.spotify.com/embed/'+esc(track.spType)+'/'+esc(track.spId)+'?utm_source=generator" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Trình phát Spotify"></iframe>';
+    setNowPlaying(track,true);
+  }
+  showMusicMsg("","");
+  renderQueue();
+}
+function playNextAuto(){
+  if(!state.queue.length) return;
+  var idx=state.queue.findIndex(function(q){return q.id===state.currentTrackId;});
+  var next=state.queue[(idx+1)%state.queue.length];
+  if(next) playTrack(next.id,true);
+}
+function stepTrack(dir){
+  if(!state.queue.length){ showMusicMsg("Danh sách phát đang trống — hãy thêm một link trước.","err"); return; }
+  var idx=state.queue.findIndex(function(q){return q.id===state.currentTrackId;});
+  if(idx<0) idx=0;
+  var next=state.queue[(idx+dir+state.queue.length)%state.queue.length];
+  playTrack(next.id,true);
+}
+$("nextTrackBtn").addEventListener("click",function(){ stepTrack(1); });
+$("prevTrackBtn").addEventListener("click",function(){ stepTrack(-1); });
+$("playPauseBtn").addEventListener("click",function(){
+  var t=currentTrack();
+  if(!t){ if(state.queue.length) playTrack(state.queue[0].id,true); return; }
+  if(t.source==="spotify"){ goTab("music"); return; }
+  if(!ytPlayer||!ytReady) return;
+  if(ytIsPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
+});
+$("seekBar").addEventListener("input",function(){
+  var t=currentTrack();
+  if(ytPlayer&&ytReady&&t&&t.source==="youtube"){
+    try{ var dur=ytPlayer.getDuration()||0; if(dur) ytPlayer.seekTo(dur*(+this.value)/100,true); }catch(e){}
+  }
+});
+$("volBar").addEventListener("input",function(){
+  $("volVal").textContent=this.value+"%";
+  if(ytPlayer&&ytReady){ try{ ytPlayer.setVolume(+this.value); }catch(e){} }
+});
+
+/* ================= Backup export / import ================= */
+$("exportBtn").addEventListener("click",function(){
+  var data={ version:1, exportedAt:new Date().toISOString(), journal:state.journal, tasks:state.tasks, queue:state.queue.map(function(q){ return {source:q.source,url:q.url,videoId:q.videoId||null,listId:q.listId||null,spType:q.spType||null,spId:q.spId||null,label:q.label};}) };
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="nhat-ky-sao-luu-"+todayISO()+".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },2000);
+});
+$("importFile").addEventListener("change",function(){
+  var file=this.files && this.files[0]; if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(){
+    try{
+      var data=JSON.parse(reader.result);
+      if(data.journal) state.journal=data.journal;
+      if(Array.isArray(data.tasks)) state.tasks=data.tasks;
+      if(Array.isArray(data.queue)) state.queue=data.queue.map(function(q){ q.id=uid(); return q; });
+      stopAllPlayback(); state.currentTrackId=null; setNowPlaying(null);
+      loadJournalDay(currentJournalISO); refreshAll(); renderQueue();
+      alertImportDone(true);
+    }catch(e){ alertImportDone(false); }
+  };
+  reader.readAsText(file);
+  this.value="";
+});
+function alertImportDone(ok){
+  var el=$("saveState");
+  setSaveState(ok?"Đã nhập lại sao lưu thành công.":"File sao lưu không đọc được — hãy chọn đúng file .json đã tải xuống.", ok);
+  goTab("journal");
+}
+
+/* ================= Init ================= */
+$("todayLabel").textContent=fmtDateVN(todayISO());
+$("journalDate").value=todayISO();
+loadJournalDay(todayISO());
+renderWeek();
+renderStats();
+renderQueue();
+setNowPlaying(null);
+})();
+</script>
+</body>
+</html>
