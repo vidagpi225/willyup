@@ -9,6 +9,6 @@
 // 5. Chưa sửa 2 giá trị dưới thì trang sẽ chỉ hiện cảnh báo cấu hình,
 //    không đăng nhập thật được (đây là hành vi cố tình, không phải lỗi).
 window.APP_CONFIG = {
-  SUPABASE_URL: "https://YOUR-PROJECT.supabase.co",
-  SUPABASE_ANON_KEY: "https://supabase.com/dashboard/project/xxzmtlmhmsdczaeotmio/"
+  SUPABASE_URL: "https://xxzmtlmhmsdczaeotmio.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_CaYwL0K-6wlfYN4nAo1cqA_hJe2NJ7P"
 };
