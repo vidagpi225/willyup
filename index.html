@@ -149,7 +149,7 @@ main{max-width:980px; margin:0 auto; padding:0 16px 90px}
 // ============================================================
 window.APP_CONFIG = {
   SUPABASE_URL: "https://xxzmtlmhmsdczaeotmio.supabase.co",
-  SUPABASE_ANON_KEY: "YOUR-ANON-KEY"
+  SUPABASE_ANON_KEY: "sb_publishable_CaYwL0K-6wlfYN4nAo1cqA_hJe2NJ7P"
 };
 </script>
 </head>
@@ -170,9 +170,7 @@ window.APP_CONFIG = {
 <main>
   <div id="configWarning" class="warning hidden">
     <strong>Chưa cấu hình Supabase.</strong>
-    Trang này cần Supabase mới đăng nhập thật được. Hãy mở file <code>config.js</code>,
-    dán <code>SUPABASE_URL</code> và <code>SUPABASE_ANON_KEY</code> của project bạn
-    (xem <code>README.md</code> bước 1–5), rồi deploy lại. Frontend một mình không lưu dữ liệu thật.
+    Trang này cần Supabase mới đăng nhập thật được. Hãy mở chính file <code>index.html</code> này trên GitHub, tìm <code>SUPABASE_ANON_KEY</code>, dán key Publishable (bắt đầu bằng sb_publishable_) vào thay cho YOUR-ANON-KEY, rồi Commit lại. File <code>config.js</code> riêng không còn được dùng trong bản 1 file này.
   </div>
   <noscript><div class="warning">Trang này cần bật JavaScript mới dùng được.</div></noscript>
 
@@ -494,7 +492,7 @@ window.APP_CONFIG = {
 
   $('authForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    if (!configured || !supabase) { $('authMsg').textContent = 'Chưa cấu hình Supabase. Xem README.md bước 1–5.'; return; }
+    if (!configured || !supabase) { $('authMsg').textContent = 'Chưa cấu hình Supabase. Mở file index.html trên GitHub, tìm SUPABASE_ANON_KEY, dán key Publishable vào thay cho YOUR-ANON-KEY rồi Commit lại.'; return; }
     refreshLockMsg();
     if (lockInfo().until > Date.now()) return;
     if ($('honeypot').value) { $('authMsg').textContent = 'Bị chặn vì nghi là bot.'; return; }
