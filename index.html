@@ -6,7 +6,124 @@
 <title>Nhật ký, Lịch tuần và Nhạc — Bản deploy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Caveat:wght@500;700&family=Inter:wght@400;600&family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@400;700&family=Patrick+Hand&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<style>
+/* Bảng màu cũ người dùng thích — Sáng */
+:root{
+  --bg:#faf6ee; --surface:#fffdf8; --surface-alt:#f3ecdc;
+  --text:#23201a; --dim:#7a7263; --border:#e7ddcb;
+  --accent:#c2410c; --accent-soft:#fbe9dd;
+  --green:#4d6b57; --green-soft:#e3ecdf;
+}
+/* Tối */
+[data-theme="dark"]{
+  --bg:#171410; --surface:#221d16; --surface-alt:#2b251b;
+  --text:#f0e9da; --dim:#a89c85; --border:#3a332a;
+  --accent:#f0834c; --accent-soft:#3d2a1d;
+  --green:#9db89a; --green-soft:#2c382a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.55;
+}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit}
+button{
+  min-height:44px; padding:10px 14px; border-radius:10px;
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--text); cursor:pointer;
+}
+button.primary{background:var(--accent); color:#fff; border-color:var(--accent)}
+button.active{background:var(--accent); color:#fff; border-color:var(--accent)}
+input,select,textarea{
+  width:100%; min-height:44px; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--surface); color:var(--text);
+}
+textarea{min-height:220px; resize:vertical; line-height:1.7}
+/* Ô viết nhật ký: nền trơn, KHÔNG dòng kẻ */
+#diaryContent{background:var(--surface); background-image:none}
+header{
+  display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+  justify-content:space-between; padding:16px; max-width:980px; margin:0 auto;
+}
+header h1{font-size:22px; margin:0}
+.theme-row{display:flex; gap:6px; flex-wrap:wrap}
+.theme-row button{min-height:40px}
+main{max-width:980px; margin:0 auto; padding:0 16px 90px}
+.card{
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; padding:16px; margin:14px 0;
+}
+.muted{color:var(--dim)}
+.small{font-size:13px}
+.warning{
+  background:var(--accent-soft); border:1px solid var(--accent);
+  border-radius:12px; padding:12px; margin:14px 0;
+}
+.hidden{display:none !important}
+.tabs{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:14px 0;
+}
+.tabs button{width:100%}
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.row>*{flex:1 1 140px}
+.toolbar{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0}
+.toolbar select,.toolbar input{flex:1 1 120px}
+.task{
+  display:flex; gap:10px; align-items:flex-start;
+  border:1px solid var(--border); border-radius:12px; padding:10px; margin:8px 0;
+  background:var(--surface-alt);
+}
+.task input[type="checkbox"]{width:22px; height:22px; flex:0 0 auto; accent-color:var(--green)}
+.task.done{opacity:.75}
+.task.done .task-title{text-decoration:line-through}
+.day{border-top:1px solid var(--border); padding:10px 0}
+.day.today{border-left:4px solid var(--accent); padding-left:10px}
+.stats-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.stat{text-align:center; background:var(--surface-alt); border-radius:14px; padding:14px 8px}
+.circle{
+  width:130px; height:130px; border-radius:50%; margin:10px auto;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; font-weight:700; background:var(--surface-alt);
+}
+.chart{display:flex; align-items:flex-end; gap:8px; height:130px; margin-top:12px}
+.bar{flex:1; background:var(--green); border-radius:8px 8px 0 0; min-height:4px; text-align:center; font-size:11px; padding-top:4px; color:#fff}
+.bar span{display:block; font-size:11px; color:var(--dim); margin-top:6px}
+.playlist-item{
+  display:flex; gap:8px; align-items:center; justify-content:space-between;
+  border:1px solid var(--border); border-radius:12px; padding:10px; margin:8px 0;
+}
+.playlist-item.playing{border-color:var(--accent); background:var(--accent-soft)}
+/* Trình phát YouTube ẩn: nằm ngoài #authView và #appView, KHÔNG bị gỡ khi đăng xuất.
+   Xem index.html: #yt-player-root ở cuối <body>, ngoài mọi màn hình. */
+#yt-player-root{position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none}
+#spotifyEmbed{width:100%; height:80px; border:0; border-radius:12px}
+/* Bottom sheet thêm việc */
+.sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  background:var(--surface); border-top:1px solid var(--border);
+  border-radius:20px 20px 0 0; padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  box-shadow:0 -8px 30px rgba(0,0,0,.18); max-height:85vh; overflow:auto;
+}
+.sheet-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40}
+.honeypot{position:absolute; left:-9999px; width:1px; height:1px; opacity:0}
+/* Mobile */
+@media (max-width:600px){
+  body{overflow-x:hidden}
+  header{padding:12px}
+  header h1{font-size:20px}
+  main{padding:0 12px 90px}
+  .tabs{grid-template-columns:repeat(2,1fr)}
+  .tabs button:last-child{grid-column:1 / -1}
+  .stats-grid{grid-template-columns:1fr}
+  .row>*{flex:1 1 100%}
+  .week-nav{flex-direction:column}
+  .week-nav button{width:100%}
+}
+
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 </head>
