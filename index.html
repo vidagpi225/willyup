@@ -149,7 +149,7 @@ main{max-width:980px; margin:0 auto; padding:0 16px 90px}
 // ============================================================
 window.APP_CONFIG = {
   SUPABASE_URL: "https://xxzmtlmhmsdczaeotmio.supabase.co",
-  SUPABASE_ANON_KEY: "sb_publishable_CaYwL0K-6wlfYN4nAo1cqA_hJe2NJ7P"
+  SUPABASE_ANON_KEY: "YOUR-ANON-KEY"
 };
 </script>
 </head>
@@ -593,10 +593,25 @@ window.APP_CONFIG = {
     var s = await supabase.from('login_sessions').select('*').eq('user_id', uid).order('last_activity', { ascending: false });
     state.sessions = s.data || [];
     renderDiaryList(); renderWeek(); renderStats(); renderPlaylist(); renderSessions();
-    // Nạp trang nhật ký hôm nay nếu có
-    var today = localDateStr(new Date());
-    var found = state.diary.find(function (x) { return x.entry_date === today; });
-    if (found) loadDiaryEntry(found);
+    // Chỉ nạp bài hôm nay 1 lần khi mới đăng nhập. Các lần loadAll sau đó
+    // (sau khi Lưu, tick việc, thêm nhạc...) KHÔNG ghi đè ô viết nữa,
+    // để tránh cảm giác "lưu rồi mà mất" khi đang viết cho ngày khác.
+    if (!loadAll._diaryLoaded) {
+      loadAll._diaryLoaded = true;
+      var today = localDateStr(new Date());
+      var found = state.diary.find(function (x) { return x.entry_date === today; });
+      if (found) loadDiaryEntry(found);
+      else {
+        try {
+          var draftRaw = localStorage.getItem('nk_draft_' + uid + '_' + today);
+          if (draftRaw) {
+            var dj = JSON.parse(draftRaw);
+            $('diaryTitle').value = dj.title || ''; $('diaryContent').value = dj.content || '';
+            $('diaryMsg').textContent = 'Đã khôi phục bản nháp chưa lưu trên máy này.';
+          }
+        } catch (e) {}
+      }
+    }
   }
 
   function applyDiaryStyle() {
@@ -629,20 +644,44 @@ window.APP_CONFIG = {
   });
   $('diaryDate').value = localDateStr(new Date());
   applyDiaryStyle();
+  // Lưu nháp tự động vào trình duyệt mỗi khi gõ, để tải lại trang cũng không mất bài chưa lưu.
+  ['diaryContent', 'diaryTitle', 'diaryDate'].forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      try {
+        if (state.user) localStorage.setItem('nk_draft_' + state.user.id + '_' + ($('diaryDate').value || localDateStr(new Date())), JSON.stringify({ title: $('diaryTitle').value, content: $('diaryContent').value }));
+      } catch (e) {}
+    });
+  });
 
   $('saveDiary').addEventListener('click', async function () {
     if (!supabase || !state.user) return;
-    var row = {
-      user_id: state.user.id, entry_date: $('diaryDate').value || localDateStr(new Date()),
-      title: $('diaryTitle').value, content: $('diaryContent').value,
-      font: $('diaryFont').value, font_size: parseInt($('diarySize').value, 10),
-      bold: state.diaryBold, italic: state.diaryItalic, underline: state.diaryUnderline,
-      color: $('diaryColor').value
-    };
-    var r = await supabase.from('diary_entries').upsert(row, { onConflict: 'user_id,entry_date' }).select().single();
-    if (r.error) { $('diaryMsg').textContent = 'Lỗi lưu: ' + r.error.message; return; }
-    $('diaryMsg').textContent = 'Đã lưu.';
-    await loadAll();
+    var btn = $('saveDiary'); btn.disabled = true; btn.textContent = 'Đang lưu...';
+    $('diaryMsg').textContent = 'Đang lưu, đừng tải lại trang...';
+    try {
+      var row = {
+        user_id: state.user.id, entry_date: $('diaryDate').value || localDateStr(new Date()),
+        title: $('diaryTitle').value, content: $('diaryContent').value,
+        font: $('diaryFont').value, font_size: parseInt($('diarySize').value, 10),
+        bold: state.diaryBold, italic: state.diaryItalic, underline: state.diaryUnderline,
+        color: $('diaryColor').value
+      };
+      var r = await supabase.from('diary_entries').upsert(row, { onConflict: 'user_id,entry_date' }).select().single();
+      if (r.error) {
+        $('diaryMsg').textContent = 'LƯU THẤT BẠI: ' + r.error.message + ' — Bài vẫn còn trong ô viết, đừng tải lại trang, hãy thử Lưu lại sau khi kiểm tra đăng nhập / quyền bảng.';
+        return;
+      }
+      try { localStorage.removeItem('nk_draft_' + state.user.id + '_' + row.entry_date); } catch (e) {}
+      $('diaryMsg').textContent = 'Đã lưu lúc ' + new Date().toLocaleTimeString('vi-VN') + ' — Bài đã có trong danh sách bên dưới, tải lại trang vẫn còn.';
+      // Chỉ cập nhật danh sách, KHÔNG gọi loadAll() ghi đè ô viết.
+      if (r.data) {
+        var idx = state.diary.findIndex(function (x) { return x.entry_date === row.entry_date; });
+        if (idx >= 0) state.diary[idx] = r.data; else state.diary.unshift(r.data);
+        state.diary.sort(function (a, b) { return b.entry_date.localeCompare(a.entry_date); });
+      }
+      renderDiaryList();
+    } finally {
+      btn.disabled = false; btn.textContent = 'Lưu nhật ký';
+    }
   });
 
   function renderDiaryList() {
