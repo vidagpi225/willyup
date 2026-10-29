@@ -134,49 +134,7 @@
     state.mode = 'register'; $('tabRegister').classList.add('active'); $('tabLogin').classList.remove('active');
     $('authTitle').textContent = 'Đăng ký'; $('authSubmit').textContent = 'Đăng ký';
   });
-     // ---------- Quên mật khẩu (PATCH) ----------
-  function showForgot() { $('authForm').classList.add('hidden'); $('forgotView').classList.remove('hidden'); $('newPasswordView').classList.add('hidden'); $('resetEmail').value = $('authEmail').value || ''; }
-  function showLoginForm() { $('authForm').classList.remove('hidden'); $('forgotView').classList.add('hidden'); $('newPasswordView').classList.add('hidden'); }
-  function showNewPassword() { showAuth(); $('authForm').classList.add('hidden'); $('forgotView').classList.add('hidden'); $('newPasswordView').classList.remove('hidden'); }
-  $('forgotBtn').addEventListener('click', showForgot);
-  $('backToLoginBtn').addEventListener('click', showLoginForm);
-  $('sendResetBtn').addEventListener('click', async function () {
-    if (!configured || !supabase) { $('resetMsg').textContent = 'Chưa cấu hình Supabase. Mở file index.html trên GitHub, tìm SUPABASE_ANON_KEY, dán key Publishable vào rồi Commit lại.'; return; }
-    var email = $('resetEmail').value.trim();
-    if (!email) { $('resetMsg').textContent = 'Hãy nhập email đã đăng ký.'; return; }
-    $('resetMsg').textContent = 'Đang gửi mail...';
-    var redirectTo = window.location.origin + window.location.pathname;
-    var res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: redirectTo });
-    if (res.error) { $('resetMsg').textContent = 'Lỗi: ' + res.error.message; return; }
-    $('resetMsg').textContent = 'Đã gửi mail đặt lại mật khẩu. Kiểm tra hộp thư (cả Spam), bấm link trong mail rồi đặt mật khẩu mới.';
-  });
-  $('setNewPasswordBtn').addEventListener('click', async function () {
-    if (!supabase) return;
-    var p1 = $('newPassword').value, p2 = $('newPassword2').value;
-    if (p1.length < 6) { $('newPassMsg').textContent = 'Mật khẩu mới phải ít nhất 6 ký tự.'; return; }
-    if (p1 !== p2) { $('newPassMsg').textContent = 'Hai mật khẩu mới chưa giống nhau.'; return; }
-    $('newPassMsg').textContent = 'Đang đặt lại...';
-    var res = await supabase.auth.updateUser({ password: p1 });
-    if (res.error) { $('newPassMsg').textContent = 'Lỗi: ' + res.error.message; return; }
-    $('newPassMsg').textContent = 'Đã đặt mật khẩu mới. Hãy đăng nhập lại bằng mật khẩu mới.';
-    try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
-    setTimeout(showLoginForm, 1200);
-  });
-  if (supabase) {
-    supabase.auth.onAuthStateChange(function (event) {
-      if (event === 'PASSWORD_RECOVERY') showNewPassword();
-    });
-    if (window.location.hash && window.location.hash.indexOf('type=recovery') !== -1) showNewPassword();
-  }
-Hàm showAuth mới (thay hàm cũ):
-  function showAuth() {
-    $('authView').classList.remove('hidden');
-    $('appView').classList.add('hidden');
-    $('userBar').style.display = 'none';
-    if ($('forgotView')) $('forgotView').classList.add('hidden');
-    if ($('newPasswordView')) $('newPasswordView').classList.add('hidden');
-    if ($('authForm')) $('authForm').classList.remove('hidden');
-  }
+
    
   $('authForm').addEventListener('submit', async function (e) {
     e.preventDefault();
