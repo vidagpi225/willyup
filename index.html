@@ -184,7 +184,7 @@ window.APP_CONFIG = {
     <form id="authForm" style="margin-top:14px">
       <label>Email<br><input type="email" id="authEmail" required autocomplete="email" placeholder="ban@example.com"></label>
       <p></p>
-      <label>Mật khẩu<br><input type="password" id="authPassword" required autocomplete="current-password" placeholder="Ít nhất 6 ký tự"></label>
+      <label>Mật khẩu<br><input type="password" id="authPassword" required autocomplete="current-password" placeholder="Ít nhất 8 ký tự"></label>
       <p></p>
       <label>Chống bot: <span id="captchaQuestion"></span><br>
         <input type="number" id="captchaAnswer" required placeholder="Nhập đáp án"></label>
@@ -194,6 +194,26 @@ window.APP_CONFIG = {
       <p id="authMsg" class="muted small"></p>
       <p id="lockMsg" class="muted small"></p>
     </form>
+        <button type="button" id="forgotBtn" style="width:100%;margin-top:10px">Quên mật khẩu?</button>
+    <div id="forgotView" class="hidden" style="margin-top:14px">
+      <h3>Quên mật khẩu</h3>
+      <p class="small muted">Nhập email đã đăng ký, Supabase sẽ gửi mail đặt lại mật khẩu. Kiểm tra cả Spam.</p>
+      <label>Email<br><input type="email" id="resetEmail" placeholder="ban@example.com"></label>
+      <p></p>
+      <button type="button" id="sendResetBtn" class="primary" style="width:100%">Gửi mail đặt lại mật khẩu</button>
+      <p id="resetMsg" class="muted small"></p>
+      <button type="button" id="backToLoginBtn" style="width:100%">Quay lại đăng nhập</button>
+    </div>
+    <div id="newPasswordView" class="hidden" style="margin-top:14px">
+      <h3>Đặt mật khẩu mới</h3>
+      <p class="small muted">Bạn vừa bấm link trong mail đặt lại mật khẩu. Nhập mật khẩu mới dưới đây.</p>
+      <label>Mật khẩu mới<br><input type="password" id="newPassword" placeholder="Ít nhất 6 ký tự"></label>
+      <p></p>
+      <label>Nhập lại mật khẩu mới<br><input type="password" id="newPassword2" placeholder="Nhập lại mật khẩu mới"></label>
+      <p></p>
+      <button type="button" id="setNewPasswordBtn" class="primary" style="width:100%">Đặt mật khẩu mới</button>
+      <p id="newPassMsg" class="muted small"></p>
+    </div>
     <p class="small muted">
       Chống bot ở đây có 2 lớp: câu tính do trình duyệt tạo + khóa tạm sau 5 lần sai.
       Đây <strong>không</strong> thay thế CAPTCHA thật. Để chống bot thật, hãy bật hCaptcha /
