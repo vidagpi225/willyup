@@ -155,7 +155,7 @@ window.APP_CONFIG = {
 </head>
 <body>
 <header>
-  <h1>📖 Nhật ký, Lịch tuần &amp; Nhạc</h1>
+  <h1>📖 Nhật ký bạn... &amp; Nhạc</h1>
   <div class="theme-row" role="group" aria-label="Giao diện">
     <button type="button" data-theme-btn="light">Sáng</button>
     <button type="button" data-theme-btn="dark">Tối</button>
@@ -543,16 +543,6 @@ window.APP_CONFIG = {
     });
     if (window.location.hash && window.location.hash.indexOf('type=recovery') !== -1) showNewPassword();
   }
-Hàm showAuth mới (thay hàm cũ):
-  function showAuth() {
-    $('authView').classList.remove('hidden');
-    $('appView').classList.add('hidden');
-    $('userBar').style.display = 'none';
-    if ($('forgotView')) $('forgotView').classList.add('hidden');
-    if ($('newPasswordView')) $('newPasswordView').classList.add('hidden');
-    if ($('authForm')) $('authForm').classList.remove('hidden');
-  }
-
   $('authForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     if (!configured || !supabase) { $('authMsg').textContent = 'Chưa cấu hình Supabase. Mở file index.html trên GitHub, tìm SUPABASE_ANON_KEY, dán key Publishable vào thay cho YOUR-ANON-KEY rồi Commit lại.'; return; }
