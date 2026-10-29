@@ -456,10 +456,13 @@ window.APP_CONFIG = {
   }
 
   // ---------- Views ----------
-  function showAuth() {
+   function showAuth() {
     $('authView').classList.remove('hidden');
     $('appView').classList.add('hidden');
     $('userBar').style.display = 'none';
+    if ($('forgotView')) $('forgotView').classList.add('hidden');
+    if ($('newPasswordView')) $('newPasswordView').classList.add('hidden');
+    if ($('authForm')) $('authForm').classList.remove('hidden');
   }
   function showApp() {
     $('authView').classList.add('hidden');
